@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 struct Hero {
@@ -13,7 +14,8 @@ void main() {
 	string heroDescription;
 
 	stringstream ss;
-	ss << hero.name << " has " << hero.health << " health";
+	ss << hero.name << " has " << hero.health << " health" << endl;
+	ss << "Potion cost $" << fixed << setprecision(2) << 3.497892;
 	heroDescription = ss.str();
 
 	cout << heroDescription << endl;
