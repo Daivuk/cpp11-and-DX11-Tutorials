@@ -9,9 +9,9 @@ Hero::Hero(string name) {
 	m_name = name;
 }
 
-Hero::Hero(string name, int armor) : 
-	m_name(name), 
-	m_armor(armor) {
+Hero::Hero(string name, int armor) {
+	m_name = name;
+	m_armor = armor;
 }
 
 void Hero::print() {
