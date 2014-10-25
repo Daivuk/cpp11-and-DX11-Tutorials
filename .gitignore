@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# User files
+*.vcxproj.user
+*.suo
+*.sdf
+
+# Folders
+Debug
+Release
