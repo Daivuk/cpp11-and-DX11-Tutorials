@@ -10,10 +10,12 @@ public:
 	void draw(Renderer& renderer);
 	void createMesh(Renderer& renderer);
 	void createShaders(Renderer& renderer);
+	void createRenderStates(Renderer& renderer);
 
 private:
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11VertexShader* m_vertexShader = nullptr;
 	ID3D11PixelShader* m_pixelShader = nullptr;
 	ID3D11InputLayout* m_inputLayout = nullptr;
+	ID3D11RasterizerState* m_rasterizerState = nullptr;
 };

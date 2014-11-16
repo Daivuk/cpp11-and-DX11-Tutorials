@@ -11,6 +11,7 @@ struct Vertex {
 Triangle::Triangle(Renderer& renderer) {
 	createMesh(renderer);
 	createShaders(renderer);
+	createRenderStates(renderer);
 }
 
 Triangle::~Triangle() {
@@ -18,10 +19,14 @@ Triangle::~Triangle() {
 	m_vertexShader->Release();
 	m_pixelShader->Release();
 	m_inputLayout->Release();
+	m_rasterizerState->Release();
 }
 
 void Triangle::draw(Renderer& renderer) {
 	auto deviceContext = renderer.getDeviceContext();
+
+	// Set render states
+	deviceContext->RSSetState(m_rasterizerState);
 
 	// Bind the triangle shaders
 	deviceContext->IASetInputLayout(m_inputLayout);
@@ -68,4 +73,15 @@ void Triangle::createShaders(Renderer& renderer) {
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	renderer.getDevice()->CreateInputLayout(layout, 2, vsData.data(), vsData.size(), &m_inputLayout);
+}
+
+void Triangle::createRenderStates(Renderer& renderer) {
+	// Rasterizer state
+	auto rasterizerDesc = CD3D11_RASTERIZER_DESC(
+		D3D11_FILL_SOLID,
+		D3D11_CULL_NONE,
+		false,
+		0, 0, 0, 0,
+		false, false, false);
+	renderer.getDevice()->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
 }
