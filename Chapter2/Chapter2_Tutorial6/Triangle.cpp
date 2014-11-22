@@ -20,6 +20,8 @@ Triangle::~Triangle() {
 	m_pixelShader->Release();
 	m_inputLayout->Release();
 	m_rasterizerState->Release();
+	m_depthState->Release();
+	m_blendState->Release();
 }
 
 void Triangle::draw(Renderer& renderer) {
@@ -27,6 +29,8 @@ void Triangle::draw(Renderer& renderer) {
 
 	// Set render states
 	deviceContext->RSSetState(m_rasterizerState);
+	deviceContext->OMSetBlendState(m_blendState, NULL, 0xffffffff);
+	deviceContext->OMSetDepthStencilState(m_depthState, 1);
 
 	// Bind the triangle shaders
 	deviceContext->IASetInputLayout(m_inputLayout);
@@ -84,4 +88,16 @@ void Triangle::createRenderStates(Renderer& renderer) {
 		0, 0, 0, 0,
 		false, false, false);
 	renderer.getDevice()->CreateRasterizerState(&rasterizerDesc, &m_rasterizerState);
+
+	// Blend state
+	auto blendDesc = CD3D11_BLEND_DESC(CD3D11_DEFAULT());
+	renderer.getDevice()->CreateBlendState(&blendDesc, &m_blendState);
+
+	// Depth state
+	auto depthDesc = CD3D11_DEPTH_STENCIL_DESC(
+		FALSE, D3D11_DEPTH_WRITE_MASK_ZERO, D3D11_COMPARISON_LESS, 
+		FALSE, D3D11_DEFAULT_STENCIL_READ_MASK, D3D11_DEFAULT_STENCIL_WRITE_MASK, 
+		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS, 
+		D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_STENCIL_OP_KEEP, D3D11_COMPARISON_ALWAYS);
+	renderer.getDevice()->CreateDepthStencilState(&depthDesc, &m_depthState);
 }
